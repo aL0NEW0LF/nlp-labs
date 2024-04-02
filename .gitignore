@@ -21,5 +21,4 @@ var/
 /.venv/
 .env
 
-tmp/*
-/tmp/*
+*/tmp
