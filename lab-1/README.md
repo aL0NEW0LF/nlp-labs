@@ -37,6 +37,8 @@ To illustrate this, I developed a basic rule-based POS tagger, showcasing its si
 
 On the other hand, the machine learning approach offers a solution to these challenges, abut with its own set of constraints. It necessitates a substantial amount of training data to achieve satisfactory results, effectively addressing the complexities inherent in Arabic POS tagging.
 
+Named Entity Recognition (NER) is often implemented straightforwardly, primarily utilizing neural networks, particularly Recurrent Neural Networks (RNNs). However, for the sake of expediency and the simplicity of this lab, we will opt to utilize the NER tool provided by Farasa.
+
 # **References**
 [1] Motazsaad, “GitHub - motazsaad/process-arabic-text: Pre-process arabic text (remove diacritics, punctuations and repeating characters),” GitHub. https://github.com/motazsaad/process-arabic-text/
 
