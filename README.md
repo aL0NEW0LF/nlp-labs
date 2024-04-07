@@ -1,6 +1,7 @@
 # **ACADEMIC - NATURAL LANGUAGE PROCESSING LABS**
 
 **Done by:** MOHAMED AMINE FAKHRE-EDDINE
+
 **Supervised by:** Pr. Lotfi EL AACHAK
 
 This repository contains the labs I've done during my academic year in the Natural Language Processing course.
