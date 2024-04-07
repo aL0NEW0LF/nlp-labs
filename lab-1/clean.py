@@ -1,7 +1,9 @@
 import re
 import string
-import sys
 import argparse
+import re
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.corpus import stopwords
 
 arabic_punctuations = '''`÷×؛<>_()*&^%][ـ،/:"؟.,'{}~¦+|!”…“–ـ'''
 english_punctuations = string.punctuation
@@ -53,3 +55,42 @@ parser.add_argument('-i', '--infile', type=argparse.FileType(mode='r', encoding=
                     help='input file.', required=True)
 parser.add_argument('-o', '--outfile', type=argparse.FileType(mode='w', encoding='utf-8'),
                     help='out file.', required=True)
+
+def cleaningPipeline(text: str):
+    content = text
+
+    content = remove_punctuations(content)
+    print("Puctuations removed!")
+    content = remove_diacritics(content)
+    print("Text discretized!")
+    content = normalize_arabic(content)
+    print("Text normalized!")
+
+    contentParagraphs = content.split('\n')
+    print("Text tokenized!")
+    contentParagraphs = list(filter(None, contentParagraphs))
+
+    res = []
+    for ele in contentParagraphs:
+        if ele.strip():
+            res.append(ele)
+
+    contentParagraphs = res
+
+    del res
+
+    for p in contentParagraphs:
+        p = sent_tokenize(p)
+    print("Paragraphs tokenized!")
+
+    stop_words = set(stopwords.words('arabic'))
+    contentWords = []
+
+    for p in contentParagraphs:
+        words = word_tokenize(p)
+        words = [w for w in words if not w in stop_words]
+        contentWords.append(words)
+    print("Words tokenized without stop words!")
+    print("Cleaning completed!")
+    
+    return contentWords
