@@ -82,11 +82,11 @@ def print_bill(bill: list):
 
     bill.pop(0)
 
-    print(f"{'Product':<{product_column}} {'Quantity':<{quantity_column}} {'Unit Price':<{unit_price_column}} Total Price")
-    print('-' * (product_column + quantity_column + unit_price_column + 15))
+    print(f"{'Product':<{product_column}} | {'Quantity':<{quantity_column}} | {'Unit Price':<{unit_price_column}} | Total Price")
+    print('-' * (product_column + quantity_column + unit_price_column + 21))
 
     for product in bill:
-        print(f"{product[1]:<{product_column}} {product[0]:<{quantity_column}} {product[2]:<{unit_price_column}} {product[0] * product[2]}")
+        print(f"{product[1]:<{product_column}} | {product[0]:<{quantity_column}}  | {product[2]:<{unit_price_column}} | {product[0] * product[2]}")
 
 def generate_bill(text: str):
     stop_words = ['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 
@@ -106,7 +106,7 @@ def generate_bill(text: str):
                  "mightn't", 'mustn', "mustn't", 'needn', "needn't", 'shan', "shan't", 'shouldn', "shouldn't", 
                  'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"]    
     numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety', 'hundred', 'thousand', 'million']
-    pattern = r"((?:" + '|'.join(numbers) + r")(?:\s(?:" + '|'.join(numbers) + r"|and))*)(.*?)(\d+[\.|\,]?\d*)\b\s*(\$|dollar)"
+    pattern = r"((?:" + '|'.join(numbers) + r"|\d)(?:\s(?:" + '|'.join(numbers) + r"|\d|and))*)(.*?)(\d+[\.|\,]?\d*)\b\s*(\$|dollar)"
     
     for stop_word in stop_words:
         insensitive_stop_word = re.compile(re.escape(' ' + stop_word + ' '), re.IGNORECASE)
