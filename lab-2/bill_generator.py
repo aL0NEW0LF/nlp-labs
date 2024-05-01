@@ -1,5 +1,7 @@
 import re
 
+from matplotlib import units
+
 def hundreds_sum(hundreds: list):
     hundreds_index = hundreds.index(100) if 100 in hundreds else -1
     total = 0
@@ -107,13 +109,16 @@ def generate_bill(text: str):
                  'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"]    
     numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety', 'hundred', 'thousand', 'million']
     pattern = r"((?:" + '|'.join(numbers) + r"|\d)(?:\s(?:" + '|'.join(numbers) + r"|\d|and))*)(.*?)(\d+[\.|\,]?\d*)\b\s*(\$|dollar)"
-    
+    units = ['kg', 'kilogram', 'g', 'gram', 'l', 'liter', 'ml', 'milliliter', 'mg', 'milligram', 'lb', 'pound', 'oz', 'ounce', 'gallon', 'quart', 'pint', 'cup', 'tablespoon', 'teaspoon', 'ton', 't']
+
     for stop_word in stop_words:
         insensitive_stop_word = re.compile(re.escape(' ' + stop_word + ' '), re.IGNORECASE)
         text = insensitive_stop_word.sub(' ', text)
     
     matches = re.findall(pattern, text)
     
-    matches = [[parse_number(match[0].strip()), match[1].strip(), float(match[2].replace(',', '.').strip())] for match in matches]
+    sc = set(units)
+
+    matches = [[parse_number(match[0].strip()), ' '.join([word for word in match[1].split() if word not in sc]), float(match[2].replace(',', '.'))] for match in matches]
 
     return matches
