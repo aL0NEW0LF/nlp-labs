@@ -37,3 +37,16 @@ Part 2: Word Embedding:
 4. Plot all the encoded/vectorized vectors using the Tsne Algorithm, evaluate those approaches, and give a general conclusion.
 
 You can find the report [here](/lab-2/README.md) or in pdf format [here](/docs/Report-Lab-2.pdf).
+
+## **Lab 3**
+**Objective:** The main purpose behind this lab is first to get familiar with using word embeddings with regression and classification models.
+
+**Work to do:**
+
+**Part 1:** Language Modeling - Regression:
+In this part of the lab, we learned about language modeling using regression, to predict the score of an answer for a specific question.
+
+**Part 2:** Language Modeling - Classification:
+In this part of the lab, we learned about language modeling using classification, to predict the sentiment of a tweet.
+
+You can find the report [here](/lab-3/README.md) or in pdf format [here](/docs/Report-Lab-3.pdf).
