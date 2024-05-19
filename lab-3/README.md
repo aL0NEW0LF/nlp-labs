@@ -49,3 +49,55 @@ After finding the best vector size for each classification model notably `Logist
 Regression and classification are two common techniques used in language modeling to predict continuous and discrete values, respectively. In this lab, we applied regression to predict the score of an answer given a question and classification to predict the sentiment of a tweet. We used word embeddings to represent words as dense vectors and trained regression and classification models on these vectors. We evaluated the models using metrics such as mean squared error, R2 score, accuracy score, and F1 score.
 
 Additionally, we learned that regression models are pretty sensitive to the vector size of the word2vec model we would be using, pretty sensitive to the smallest change in the vector size, in contrast to classification models, which are more robust to changes in the vector size, so a small change in the vector size would not affect the performance of the model that much, that's why fine-tuning word2vec model for classification would take so much more time.
+
+# **REFERENCES**
+[1] T. Zerrouki, “pyarabic, an arabic language library for python.” [Online]. Available:
+https://pypi.python.org/pypi/pyarabic,year={2010}
+
+[2] ——, “Tashaphyne, arabic light stemmer,” 2012. [Online]. Available: https:
+//pypi.python.org/pypi/Tashaphyne/
+
+[3] ——, “qalsadi, arabic mophological analyzer library for python.” 2012. [Online].
+Available: https://pypi.python.org/pypi/qalsadi
+
+[4] ——, “Towards an open platform for arabic language processing,” 2020.
+
+[5] A. L. T. G. at Qatar Computing Research Institute (QCRI), “farasa, the state-of-
+the-art full-stack package to deal with arabic language processing.” 2020. [Online].
+Available: https://farasa.qcri.org/
+
+[6] M. H. Btoush, A. Alarabeyyat, and I. Olab, “Rule based approach for arabic
+part of speech tagging and name entity recognition,” International Journal of
+Advanced Computer Science and Applications, vol. 7, no. 6, 2016. [Online]. Available:
+http://dx.doi.org/10.14569/IJACSA.2016.070642
+
+[7] T. Mikolov, K. Chen, G. Corrado, and J. Dean, “Efficient estimation of word represen-
+tations in vector space,” 2013.
+
+[8] R. ˇReh ̊uˇrek and P. Sojka, “Software Framework for Topic Modelling with Large Cor-
+pora,” in Proceedings of the LREC 2010 Workshop on New Challenges for NLP Frame-
+works. Valletta, Malta: ELRA, May 2010, pp. 45–50, http://is.muni.cz/publication/
+884893/en.
+
+[9] M. Abadi, A. Agarwal, P. Barham, E. Brevdo, Z. Chen, C. Citro, G. S. Corrado,
+A. Davis, J. Dean, M. Devin, S. Ghemawat, I. Goodfellow, A. Harp, G. Irving,
+M. Isard, Y. Jia, R. Jozefowicz, L. Kaiser, M. Kudlur, J. Levenberg, D. Man ́e,
+R. Monga, S. Moore, D. Murray, C. Olah, M. Schuster, J. Shlens, B. Steiner,
+I. Sutskever, K. Talwar, P. Tucker, V. Vanhoucke, V. Vasudevan, F. Vi ́egas,
+O. Vinyals, P. Warden, M. Wattenberg, M. Wicke, Y. Yu, and X. Zheng, “TensorFlow:
+Large-scale machine learning on heterogeneous systems,” 2015, software available from
+tensorflow.org. [Online]. Available: https://www.tensorflow.org/
+
+[10] P. Bojanowski, E. Grave, A. Joulin, and T. Mikolov, “Enriching word vectors with
+subword information,” Transactions of the Association for Computational Linguistics,
+vol. 5, pp. 135–146, 2017.
+
+[11] Stanfordnlp, “Github - stanfordnlp/glove: Software in c and data files for the popular
+glove model for distributed word representations, a.k.a. word vectors or embeddings.”
+[Online]. Available: https://github.com/stanfordnlp/GloVe
+
+[12] M. Toshevska, F. Stojanovska, and J. Kalajdjieski, “Comparative analysis of word
+embeddings for capturing word similarities,” in 6th International Conference on Natural
+Language Processing (NATP 2020), ser. NATP 2020. Aircc Publishing Corporation,
+Apr. 2020. [Online]. Available: http://dx.doi.org/10.5121/csit.2020.100402
+5
