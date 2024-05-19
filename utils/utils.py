@@ -5,7 +5,7 @@ import re
 from nltk.stem import WordNetLemmatizer
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.metrics import accuracy_score, f1_score, mean_squared_error, r2_score
 from gensim.models import Word2Vec
 import pandas as pd
 
@@ -90,18 +90,33 @@ def lemma(words: list):
     lemmatizer = WordNetLemmatizer()
     return [lemmatizer.lemmatize(w) for w in words]
 
+
 def vectorize_answer(answer_tokens, word2vec_model):
+    """ Vectorizes a list of tokens using a Word2Vec model.
+    Args:
+        - answer_tokens (list): List of tokens to vectorize.
+        - word2vec_model (Word2Vec): Word2Vec model to use for vectorization.
+    """
     answer_vector = pd.Series([np.mean([word2vec_model.wv[word] for word in sentence if word in word2vec_model.wv] or [np.zeros(word2vec_model.vector_size)], axis=0) for sentence in answer_tokens])
     return answer_vector
 
-# function to see MSE and R2 variation with the variation of vector size
-def max_mse_r2_variation(dataframe, model, sg=0, test_size=0.1):
+def finetune_mse_r2(dataframe, model, sg=0, test_size=0.1, min_vector_size=1, max_vector_size=1000):
+    """ 
+    Finetunes a regression model using Word2Vec embeddings and returns the best MSE, R2 and vector size.
+    Args:
+        - dataframe (pd.DataFrame): Dataframe containing the data.
+        - model: Regression model to finetune.
+        - sg (int): Skip-gram parameter for Word2Vec.
+        - test_size (float): Test size for train-test split.
+        - min_vector_size (int): Minimum vector size to test.
+        - max_vector_size (int): Maximum vector size to test.
+    """
     best_mse = 1000000000
     best_r2 = -1000000000
     best_vector_size = 0
 
 
-    for i in range(1, 2000):
+    for i in range(min_vector_size, max_vector_size):
         cbow_model = Word2Vec(dataframe['answer'], vector_size=i, window=5, sg=sg, min_count=1)
         answer_vector = vectorize_answer(dataframe['answer'], cbow_model)
 
@@ -125,7 +140,16 @@ def max_mse_r2_variation(dataframe, model, sg=0, test_size=0.1):
 
     return best_mse, best_r2, best_vector_size
 
-def evaluate_model(dataframe, model, vector_size, sg=0, test_size=0.1):
+def evaluate_reg_model(dataframe, model, vector_size, sg=0, test_size=0.1):
+    """
+    Evaluates a regression model using Word2Vec embeddings and returns the MSE and R2.
+    Args:
+        - dataframe (pd.DataFrame): Dataframe containing the data.
+        - model: Regression model to evaluate.
+        - vector_size (int): Vector size for Word2Vec.
+        - sg (int): Skip-gram parameter for Word2Vec.
+        - test_size (float): Test size for train-test split.
+    """
     cbow_model = Word2Vec(dataframe['answer'], vector_size=vector_size, window=5, sg=sg, min_count=1)
     answer_vector = vectorize_answer(dataframe['answer'], cbow_model)
 
@@ -140,3 +164,76 @@ def evaluate_model(dataframe, model, vector_size, sg=0, test_size=0.1):
     print('MSE: ', mse, ' - R2: ', r2)
 
     return mse, r2
+
+def finetune_acc_f1(dataframe_train, dataframe_val, model, sg=0, min_vector_size=1, max_vector_size=1000):
+    """
+    Finetunes a classification model using Word2Vec embeddings and returns the best accuracy, F1 and vector size.
+    Args:
+        - dataframe_train (pd.DataFrame): Dataframe containing the training data.
+        - dataframe_val (pd.DataFrame): Dataframe containing the validation data.
+        - model: Classification model to finetune.
+        - sg (int): Skip-gram parameter for Word2Vec.
+        - min_vector_size (int): Minimum vector size to test.
+        - max_vector_size (int): Maximum vector size to test.
+    """
+    best_acc = -1000000000
+    best_f1 = -1000000000
+    best_vector_size = 0
+
+
+    for i in range(min_vector_size, max_vector_size):
+        cbow_model = Word2Vec(dataframe_train['text'], vector_size=i, window=5, sg=sg, min_count=1)
+        text_vectors = vectorize_answer(dataframe_train['text'], cbow_model)
+        valid_text_vectors = vectorize_answer(dataframe_val['text'], cbow_model)
+
+        X_train = pd.DataFrame(text_vectors.values.tolist(), index=text_vectors.index)
+        y_train = dataframe_train['label']
+        X_test = pd.DataFrame(valid_text_vectors.values.tolist(), index=dataframe_val.index)
+        y_test = dataframe_val['label']
+
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+
+        acc = accuracy_score(y_test, y_pred)
+        f1 = f1_score(y_test, y_pred, average='macro')
+
+        if acc > best_acc and f1 > best_f1:
+            best_acc = acc
+            best_f1 = f1
+            best_vector_size = i
+        
+        if i % 100 == 0:
+            print('Vector size: ', i, ' - Accuracy: ', acc, ' - F1: ', f1, ' - Best Accuracy: ', best_acc, ' - Best F1: ', best_f1, ' - Best Vector Size: ', best_vector_size)
+
+    print('Best Accuracy: ', best_acc, ' - Best F1: ', best_f1, ' - Best Vector Size: ', best_vector_size)
+
+    return best_acc, best_f1, best_vector_size
+
+def evaluate_clf_model(dataframe_train, dataframe_val, model, vector_size, sg=0):
+    """
+    Evaluates a classification model using Word2Vec embeddings and returns the accuracy and F1.
+    Args:
+        - dataframe_train (pd.DataFrame): Dataframe containing the training data.
+        - dataframe_val (pd.DataFrame): Dataframe containing the validation data.
+        - model: Classification model to evaluate.
+        - vector_size (int): Vector size for Word2Vec.
+        - sg (int): Skip-gram parameter for Word2Vec.
+    """
+    cbow_model = Word2Vec(dataframe_train['text'], vector_size=vector_size, window=5, sg=sg, min_count=1)
+    text_vectors = vectorize_answer(dataframe_train['text'], cbow_model)
+    valid_text_vectors = vectorize_answer(dataframe_val['text'], cbow_model)
+
+    X_train = pd.DataFrame(text_vectors.values.tolist(), index=text_vectors.index)
+    y_train = dataframe_train['label']
+    X_test = pd.DataFrame(valid_text_vectors.values.tolist(), index=dataframe_val.index)
+    y_test = dataframe_val['label']
+
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+
+    acc = accuracy_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred, average='macro')
+
+    print('Accuracy: ', acc, ' - F1: ', f1)
+
+    return acc, f1
