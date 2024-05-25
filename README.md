@@ -50,3 +50,9 @@ In this part of the lab, we learned about language modeling using regression, to
 In this part of the lab, we learned about language modeling using classification, to predict the sentiment of a tweet.
 
 You can find the report [here](/lab-3/README.md) or in pdf format [here](/docs/Report-Lab-3.pdf).
+
+## **Lab 4**
+
+**Objective:** The main purpose behind this lab is to predict the relevance of a text to a specific topic, using a recurrent neural network, in addition to fine-tuning with a pre-trained language model.
+
+You can find the report [here](/lab-4/README.md) or in pdf format [here](/docs/Report-Lab-4.pdf).
